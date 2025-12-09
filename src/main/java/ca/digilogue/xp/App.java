@@ -1,5 +1,7 @@
-package ca.digilogue;
+package ca.digilogue.xp;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.info.BuildProperties;
@@ -13,12 +15,16 @@ import java.util.List;
 @SpringBootApplication
 public class App {
 
+    public static String version;
+
+    private static final Logger log = LoggerFactory.getLogger(App.class);
+
     public static void main(String[] args) {
         ConfigurableApplicationContext ctx = SpringApplication.run(App.class, args);
 
-        String version = resolveVersion(ctx);
+        version = resolveVersion(ctx);
 
-        System.out.println("\nxp-users-service is running @ version: " + version);
+        log.info("xp-users-service is running @ version: {}", version);
     }
 
     private static String resolveVersion(ConfigurableApplicationContext ctx) {

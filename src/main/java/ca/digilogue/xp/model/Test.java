@@ -1,4 +1,4 @@
-package ca.digilogue.model;
+package ca.digilogue.xp.model;
 
 public class Test {
     private String message;
