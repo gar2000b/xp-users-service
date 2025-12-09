@@ -5,7 +5,7 @@ This service is part of the broader **XP (eXPerimental Platform)** ecosystem.
 
 ---
 
-## �� Features
+## 🚀 Features
 - Spring Boot 4.x (modern stack)
 - Java 21 runtime
 - Self-contained executable **fat JAR**
@@ -15,7 +15,7 @@ This service is part of the broader **XP (eXPerimental Platform)** ecosystem.
 
 ---
 
-## �� Tech Stack
+## 🧰 Tech Stack
 
 | Component | Choice |
 |----------|--------|
@@ -27,7 +27,7 @@ This service is part of the broader **XP (eXPerimental Platform)** ecosystem.
 
 ---
 
-## �� Building & Running
+## 🛠️ Building & Running
 
 Build:
 ```bash
@@ -51,11 +51,11 @@ http://localhost:8080/actuator/health
 
 ---
 
-## �� Docker Support
+## 🐳 Docker Support
 
 Included Dockerfile allows image creation directly from the fat JAR.
 
-Example manual build:
+Manual build:
 ```bash
 docker build -t gar2000b/xp-users-service:latest .
 ```
@@ -67,40 +67,40 @@ docker run -p 8080:8080 gar2000b/xp-users-service:latest
 
 ---
 
-## �� Release Lifecycle Scripts
+## 🔁 Release Workflow (Automated Scripts)
 
-This repo includes helper scripts to automate release + Docker image publishing.  
-**Order matters** — always execute them in this sequence:
+This repo includes helper scripts to automate release + Docker publishing.
 
-| Order | Script | Purpose |
-|------|--------|---------|
-| 1️⃣ | `release.sh` | Runs Maven release plugin to bump version, tag repo, and build JAR |
-| 2️⃣ | `build-docker-image.sh` | Builds Docker image using latest built JAR |
-| 3️⃣ | `push-docker-image.sh` | Pushes tagged image(s) to Docker Hub |
+| Order | Script                  | Purpose |
+|------|-------------------------|---------|
+| 1️⃣ | `release-mvn-to-git.sh` | Executes Maven release to bump version, tag repo, and build JAR — then triggers Docker build + push |
+| 2️⃣ | `build-docker-image.sh` | Builds Docker image using the latest fat JAR |
+| 3️⃣ | `push-docker-image.sh`  | Pushes tagged Docker image(s) to Docker Hub |
+
+All run automatically by:
+```bash
+./release.sh
+```
 
 ---
 
-## ⚠️ full-reset.sh
+## ⚠️ full-reset.sh — Emergency Use Only
 
-Script:
+Use this script when Maven release fails mid-process and the repo becomes messy.
+
+It:
 - Resets repo to `origin/main`
-- Removes untracked files (+ release debris)
-- Deletes `target/`
-- Ensures clean state for future releases
+- Deletes untracked files + release leftovers
+- Removes `target/`
+- Restores clean working state
 
-Use when:
-- The maven release process fails mid-way
-- You get unremovable `target/checkout/.git/...` files
-- Git becomes inconsistent with remote
-
-Run carefully — it wipes local changes:
+Run carefully — it **wipes local changes**:
 ```bash
 ./full-reset.sh
 ```
 
 ---
 
-## �� Status
+## 📌 Status
 
-This is a **research service** — design, APIs, and data model will evolve rapidly.
-
+This is a **research prototype** — design, API, and data model may change rapidly.
