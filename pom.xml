@@ -87,8 +87,8 @@
         <configuration>
           <tagNameFormat>v@{project.version}</tagNameFormat>
           <autoVersionSubmodules>true</autoVersionSubmodules>
-          <!-- Run up to 'verify' instead of 'deploy' (no remote repo needed) -->
           <goals>verify</goals>
+          <localCheckout>true</localCheckout>
         </configuration>
       </plugin>
 
