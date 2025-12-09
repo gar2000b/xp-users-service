@@ -9,7 +9,7 @@
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-parent</artifactId>
     <version>4.0.0</version>
-    <relativePath/> <!-- lookup parent from repository -->
+    <relativePath/>
   </parent>
 
   <groupId>ca.digilogue.xp</groupId>
@@ -17,10 +17,19 @@
   <version>0.0.1-SNAPSHOT</version>
   <name>xp-users-service</name>
   <description>XP Users Spring Boot microservice</description>
+
+  <scm>
+    <!-- Read-only connection -->
+    <connection>scm:git:https://github.com/gar2000b/xp-users-service.git</connection>
+    <!-- Used for tagging/pushing (adjust if you use a different remote URL) -->
+    <developerConnection>scm:git:ssh://git@github.com/gar2000b/xp-users-service.git</developerConnection>
+    <!-- Use the current HEAD when preparing a release -->
+    <tag>HEAD</tag>
+  </scm>
+
   <packaging>jar</packaging>
 
   <properties>
-    <!-- Use a modern LTS Java version -->
     <java.version>21</java.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
@@ -61,14 +70,13 @@
 
   <build>
     <plugins>
-      <!-- Builds an executable / fat jar: `mvn clean package` -> target/xp-users-service-*.jar -->
+      <!-- Spring Boot: builds an executable / fat jar -->
       <plugin>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-maven-plugin</artifactId>
-        <!-- Parent already configures repackage goal; extra config can go here later -->
       </plugin>
 
-      <!-- Explicit compiler setup (Boot also manages this, but this makes Java 21 intent clear) -->
+      <!-- Explicit compiler setup (Java 21) -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
@@ -76,8 +84,26 @@
           <release>${java.version}</release>
         </configuration>
       </plugin>
+
+      <!-- Maven Release Plugin: handles version bumping + git tags/commits -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-release-plugin</artifactId>
+        <version>3.0.1</version>
+        <configuration>
+          <!-- Tag will look like: v0.0.1 -->
+          <tagNameFormat>v@{project.version}</tagNameFormat>
+          <autoVersionSubmodules>true</autoVersionSubmodules>
+        </configuration>
+      </plugin>
+
+      <!-- (Optional but handy) Versions Plugin for manual bumps if needed -->
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>versions-maven-plugin</artifactId>
+        <version>2.16.2</version>
+      </plugin>
     </plugins>
   </build>
 
 </project>
-
