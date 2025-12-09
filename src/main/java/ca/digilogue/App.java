@@ -18,7 +18,7 @@ public class App {
 
         String version = resolveVersion(ctx);
 
-        System.out.println("xp-users-service is running @ version: " + version);
+        System.out.println("\nxp-users-service is running @ version: " + version);
     }
 
     private static String resolveVersion(ConfigurableApplicationContext ctx) {
