@@ -11,14 +11,14 @@
 
   <groupId>ca.digilogue.xp</groupId>
   <artifactId>xp-users-service</artifactId>
-  <version>0.0.14-SNAPSHOT</version>
+  <version>0.0.14</version>
   <name>xp-users-service</name>
   <description>XP Users Spring Boot microservice</description>
 
   <scm>
     <connection>scm:git:https://github.com/gar2000b/xp-users-service.git</connection>
     <developerConnection>scm:git:https://github.com/gar2000b/xp-users-service.git</developerConnection>
-    <tag>HEAD</tag>
+    <tag>v0.0.14</tag>
   </scm>
 
   <packaging>jar</packaging>
