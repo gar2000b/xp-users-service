@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0                              https://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
@@ -11,14 +11,14 @@
 
   <groupId>ca.digilogue.xp</groupId>
   <artifactId>xp-users-service</artifactId>
-  <version>0.0.1</version>
+  <version>0.0.2-SNAPSHOT</version>
   <name>xp-users-service</name>
   <description>XP Users Spring Boot microservice</description>
 
   <scm>
     <connection>scm:git:https://github.com/gar2000b/xp-users-service.git</connection>
     <developerConnection>scm:git:https://github.com/gar2000b/xp-users-service.git</developerConnection>
-    <tag>v0.0.1</tag>
+    <tag>HEAD</tag>
   </scm>
 
   <packaging>jar</packaging>
