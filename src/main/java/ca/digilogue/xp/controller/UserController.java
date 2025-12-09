@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Arrays;
 import java.util.List;
 
 @RestController
@@ -36,24 +35,15 @@ public class UserController {
 
     @GetMapping("/users/{id}")
     public ResponseEntity<User> getUserById(@PathVariable String id) {
-
         log.info("Received GET /users/{}", id);
 
-        // Temporary mock users — DB integration later
-        List<User> users = Arrays.asList(
-                new User("1", "jdoe", "John", "Doe", "jdoe@example.com"),
-                new User("2", "asmith", "Alice", "Smith", "asmith@example.com")
-        );
+        User user = userService.getUserById(id);
 
-        // Try to locate the requested user
-        for (User user : users) {
-            if (user.getId().equals(id)) {
-                log.info("GET /users/{} → Found: {{\"username\":\"{}\"}}", id, user.getUsername());
-                return ResponseEntity.ok(user);
-            }
+        if (user != null) {
+            log.info("GET /users/{} → Found: {{\"username\":\"{}\"}}", id, user.getUsername());
+            return ResponseEntity.ok(user);
         }
 
-        // If not found, log it and return 404
         log.warn("GET /users/{} → Not Found", id);
         return ResponseEntity.notFound().build();
     }

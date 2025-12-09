@@ -16,6 +16,8 @@ public class UserRepository {
 
     private static final String SELECT_ALL_USERS_SQL =
             "SELECT id, username, first_name, last_name, email FROM users";
+    private static final String SELECT_USER_BY_ID_SQL =
+            "SELECT id, username, first_name, last_name, email FROM users WHERE id = ?";
 
     public UserRepository(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
@@ -23,6 +25,11 @@ public class UserRepository {
 
     public List<User> findAll() {
         return jdbcTemplate.query(SELECT_ALL_USERS_SQL, new UserRowMapper());
+    }
+
+    public User findById(String id) {
+        List<User> users = jdbcTemplate.query(SELECT_USER_BY_ID_SQL, new UserRowMapper(), id);
+        return users.isEmpty() ? null : users.get(0);
     }
 
     private static class UserRowMapper implements RowMapper<User> {
