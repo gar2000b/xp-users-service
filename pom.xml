@@ -19,11 +19,8 @@
   <description>XP Users Spring Boot microservice</description>
 
   <scm>
-    <!-- Read-only connection -->
     <connection>scm:git:https://github.com/gar2000b/xp-users-service.git</connection>
-    <!-- Used for tagging/pushing (adjust if you use a different remote URL) -->
-    <developerConnection>scm:git:ssh://git@github.com/gar2000b/xp-users-service.git</developerConnection>
-    <!-- Use the current HEAD when preparing a release -->
+    <developerConnection>scm:git:https://github.com/gar2000b/xp-users-service.git</developerConnection>
     <tag>HEAD</tag>
   </scm>
 
