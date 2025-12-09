@@ -85,9 +85,10 @@
         <artifactId>maven-release-plugin</artifactId>
         <version>3.0.1</version>
         <configuration>
-          <!-- Tag will look like: v0.0.1 -->
           <tagNameFormat>v@{project.version}</tagNameFormat>
           <autoVersionSubmodules>true</autoVersionSubmodules>
+          <!-- Run up to 'verify' instead of 'deploy' (no remote repo needed) -->
+          <goals>verify</goals>
         </configuration>
       </plugin>
 
