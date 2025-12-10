@@ -22,4 +22,12 @@ public class UserService {
     public User getUserById(String id) {
         return userRepository.findById(id);
     }
+
+    public User createUser(User user) {
+        return userRepository.save(user);
+    }
+
+    public User updateUser(User user) {
+        return userRepository.update(user);
+    }
 }

@@ -4,9 +4,13 @@ import ca.digilogue.xp.model.User;
 import ca.digilogue.xp.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -46,5 +50,35 @@ public class UserController {
 
         log.warn("GET /users/{} → Not Found", id);
         return ResponseEntity.notFound().build();
+    }
+
+    @PostMapping("/users")
+    public ResponseEntity<User> createUser(@RequestBody User user) {
+        log.info("Received POST /users with username: {}", user.getUsername());
+
+        User createdUser = userService.createUser(user);
+
+        log.info("POST /users → Created user with id: {} and username: {}", 
+                createdUser.getId(), createdUser.getUsername());
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdUser); // 201 Created
+    }
+
+    @PutMapping("/users/{id}")
+    public ResponseEntity<User> updateUser(@PathVariable String id, @RequestBody User user) {
+        log.info("Received PUT /users/{} with username: {}", id, user.getUsername());
+
+        // Set the ID from the path parameter to ensure it matches
+        user.setId(id);
+
+        User updatedUser = userService.updateUser(user);
+
+        if (updatedUser != null) {
+            log.info("PUT /users/{} → Updated user with username: {}", id, updatedUser.getUsername());
+            return ResponseEntity.ok(updatedUser); // 200 OK
+        }
+
+        log.warn("PUT /users/{} → Not Found", id);
+        return ResponseEntity.notFound().build(); // 404 Not Found
     }
 }

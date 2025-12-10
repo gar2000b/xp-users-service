@@ -18,6 +18,10 @@ public class UserRepository {
             "SELECT id, username, first_name, last_name, email FROM users";
     private static final String SELECT_USER_BY_ID_SQL =
             "SELECT id, username, first_name, last_name, email FROM users WHERE id = ?";
+    private static final String INSERT_USER_SQL =
+            "INSERT INTO users (username, first_name, last_name, email) VALUES (?, ?, ?, ?)";
+    private static final String UPDATE_USER_SQL =
+            "UPDATE users SET username = ?, first_name = ?, last_name = ?, email = ? WHERE id = ?";
 
     public UserRepository(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
@@ -30,6 +34,37 @@ public class UserRepository {
     public User findById(String id) {
         List<User> users = jdbcTemplate.query(SELECT_USER_BY_ID_SQL, new UserRowMapper(), id);
         return users.isEmpty() ? null : users.get(0);
+    }
+
+    public User save(User user) {
+        jdbcTemplate.update(INSERT_USER_SQL,
+                user.getUsername(),
+                user.getFirstName(),
+                user.getLastName(),
+                user.getEmail());
+
+        // Retrieve the generated ID by querying with username (which is unique)
+        return jdbcTemplate.query(
+                "SELECT id, username, first_name, last_name, email FROM users WHERE username = ?",
+                new UserRowMapper(),
+                user.getUsername()
+        ).get(0);
+    }
+
+    public User update(User user) {
+        int rowsAffected = jdbcTemplate.update(UPDATE_USER_SQL,
+                user.getUsername(),
+                user.getFirstName(),
+                user.getLastName(),
+                user.getEmail(),
+                Long.parseLong(user.getId()));
+
+        if (rowsAffected == 0) {
+            return null; // User not found
+        }
+
+        // Return the updated user
+        return findById(user.getId());
     }
 
     private static class UserRowMapper implements RowMapper<User> {
