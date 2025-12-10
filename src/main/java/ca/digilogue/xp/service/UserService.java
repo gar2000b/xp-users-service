@@ -5,6 +5,7 @@ import ca.digilogue.xp.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class UserService {
@@ -29,6 +30,10 @@ public class UserService {
 
     public User updateUser(User user) {
         return userRepository.update(user);
+    }
+
+    public User partialUpdateUser(String id, Map<String, Object> updates) {
+        return userRepository.partialUpdate(id, updates);
     }
 
     public boolean deleteUser(String id) {

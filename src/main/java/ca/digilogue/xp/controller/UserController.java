@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 public class UserController {
@@ -80,6 +82,21 @@ public class UserController {
         }
 
         log.warn("PUT /users/{} → Not Found", id);
+        return ResponseEntity.notFound().build(); // 404 Not Found
+    }
+
+    @PatchMapping("/users/{id}")
+    public ResponseEntity<User> partialUpdateUser(@PathVariable String id, @RequestBody Map<String, Object> updates) {
+        log.info("Received PATCH /users/{} with fields: {}", id, updates.keySet());
+
+        User updatedUser = userService.partialUpdateUser(id, updates);
+
+        if (updatedUser != null) {
+            log.info("PATCH /users/{} → Updated user with username: {}", id, updatedUser.getUsername());
+            return ResponseEntity.ok(updatedUser); // 200 OK
+        }
+
+        log.warn("PATCH /users/{} → Not Found", id);
         return ResponseEntity.notFound().build(); // 404 Not Found
     }
 

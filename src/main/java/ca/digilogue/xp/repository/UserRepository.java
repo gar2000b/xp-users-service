@@ -7,7 +7,9 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Repository
 public class UserRepository {
@@ -67,6 +69,52 @@ public class UserRepository {
 
         // Return the updated user
         return findById(user.getId());
+    }
+
+    public User partialUpdate(String id, Map<String, Object> updates) {
+        if (updates.isEmpty()) {
+            // No fields to update, just return the existing user
+            return findById(id);
+        }
+
+        // Build dynamic SQL based on provided fields
+        List<String> setClauses = new ArrayList<>();
+        List<Object> values = new ArrayList<>();
+
+        if (updates.containsKey("username")) {
+            setClauses.add("username = ?");
+            values.add(updates.get("username"));
+        }
+        if (updates.containsKey("firstName")) {
+            setClauses.add("first_name = ?");
+            values.add(updates.get("firstName"));
+        }
+        if (updates.containsKey("lastName")) {
+            setClauses.add("last_name = ?");
+            values.add(updates.get("lastName"));
+        }
+        if (updates.containsKey("email")) {
+            setClauses.add("email = ?");
+            values.add(updates.get("email"));
+        }
+
+        if (setClauses.isEmpty()) {
+            // No valid fields to update, return existing user
+            return findById(id);
+        }
+
+        // Build the SQL statement
+        String sql = "UPDATE users SET " + String.join(", ", setClauses) + " WHERE id = ?";
+        values.add(Long.parseLong(id));
+
+        int rowsAffected = jdbcTemplate.update(sql, values.toArray());
+
+        if (rowsAffected == 0) {
+            return null; // User not found
+        }
+
+        // Return the updated user
+        return findById(id);
     }
 
     public boolean deleteById(String id) {
