@@ -22,6 +22,8 @@ public class UserRepository {
             "INSERT INTO users (username, first_name, last_name, email) VALUES (?, ?, ?, ?)";
     private static final String UPDATE_USER_SQL =
             "UPDATE users SET username = ?, first_name = ?, last_name = ?, email = ? WHERE id = ?";
+    private static final String DELETE_USER_SQL =
+            "DELETE FROM users WHERE id = ?";
 
     public UserRepository(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
@@ -65,6 +67,11 @@ public class UserRepository {
 
         // Return the updated user
         return findById(user.getId());
+    }
+
+    public boolean deleteById(String id) {
+        int rowsAffected = jdbcTemplate.update(DELETE_USER_SQL, Long.parseLong(id));
+        return rowsAffected > 0;
     }
 
     private static class UserRowMapper implements RowMapper<User> {

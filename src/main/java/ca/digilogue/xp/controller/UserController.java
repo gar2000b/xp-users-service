@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -79,6 +80,21 @@ public class UserController {
         }
 
         log.warn("PUT /users/{} → Not Found", id);
+        return ResponseEntity.notFound().build(); // 404 Not Found
+    }
+
+    @DeleteMapping("/users/{id}")
+    public ResponseEntity<Void> deleteUser(@PathVariable String id) {
+        log.info("Received DELETE /users/{}", id);
+
+        boolean deleted = userService.deleteUser(id);
+
+        if (deleted) {
+            log.info("DELETE /users/{} → Deleted successfully", id);
+            return ResponseEntity.noContent().build(); // 204 No Content
+        }
+
+        log.warn("DELETE /users/{} → Not Found", id);
         return ResponseEntity.notFound().build(); // 404 Not Found
     }
 }

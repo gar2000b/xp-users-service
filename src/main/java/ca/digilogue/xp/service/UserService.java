@@ -30,4 +30,8 @@ public class UserService {
     public User updateUser(User user) {
         return userRepository.update(user);
     }
+
+    public boolean deleteUser(String id) {
+        return userRepository.deleteById(id);
+    }
 }
