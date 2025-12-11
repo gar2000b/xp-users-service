@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -30,13 +31,24 @@ public class UserController {
     }
 
     @GetMapping("/users")
-    public ResponseEntity<List<User>> getAllUsers() {
-        log.info("Received GET /users");
+    public ResponseEntity<List<User>> getUsers(
+            @RequestParam(required = false) String firstName,
+            @RequestParam(required = false) String lastName) {
+        
+        if ((firstName == null || firstName.trim().isEmpty()) && 
+            (lastName == null || lastName.trim().isEmpty())) {
+            log.info("Received GET /users (no filters)");
+            List<User> users = userService.getAllUsers();
+            log.info("GET /users → {} users returned", users.size());
+            return ResponseEntity.ok(users);
+        }
 
-        List<User> users = userService.getAllUsers();
-
+        log.info("Received GET /users with filters - firstName: {}, lastName: {}", firstName, lastName);
+        
+        List<User> users = userService.getUsersByFilters(firstName, lastName);
+        
         log.info("GET /users → {} users returned", users.size());
-
+        
         return ResponseEntity.ok(users); // 200 OK with JSON array of User
     }
 

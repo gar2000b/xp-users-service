@@ -1,6 +1,8 @@
 package ca.digilogue.xp.repository;
 
 import ca.digilogue.xp.model.User;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
@@ -13,6 +15,8 @@ import java.util.Map;
 
 @Repository
 public class UserRepository {
+
+    private static final Logger log = LoggerFactory.getLogger(UserRepository.class);
 
     private final JdbcTemplate jdbcTemplate;
 
@@ -33,6 +37,65 @@ public class UserRepository {
 
     public List<User> findAll() {
         return jdbcTemplate.query(SELECT_ALL_USERS_SQL, new UserRowMapper());
+    }
+
+    public List<User> findByFilters(String firstName, String lastName) {
+        List<String> whereClauses = new ArrayList<>();
+        List<Object> params = new ArrayList<>();
+
+        if (firstName != null && !firstName.trim().isEmpty()) {
+            String trimmed = firstName.trim();
+            if (trimmed.contains("*")) {
+                // Wildcard pattern - use LIKE
+                String likePattern = buildLikePattern(trimmed);
+                log.info("firstName wildcard pattern: '{}' -> LIKE pattern: '{}'", trimmed, likePattern);
+                whereClauses.add("first_name LIKE ?");
+                params.add(likePattern);
+            } else {
+                // Exact match
+                log.info("firstName exact match: '{}'", trimmed);
+                whereClauses.add("first_name = ?");
+                params.add(trimmed);
+            }
+        }
+        if (lastName != null && !lastName.trim().isEmpty()) {
+            String trimmed = lastName.trim();
+            if (trimmed.contains("*")) {
+                // Wildcard pattern - use LIKE
+                String likePattern = buildLikePattern(trimmed);
+                log.info("lastName wildcard pattern: '{}' -> LIKE pattern: '{}'", trimmed, likePattern);
+                whereClauses.add("last_name LIKE ?");
+                params.add(likePattern);
+            } else {
+                // Exact match
+                log.info("lastName exact match: '{}'", trimmed);
+                whereClauses.add("last_name = ?");
+                params.add(trimmed);
+            }
+        }
+
+        if (whereClauses.isEmpty()) {
+            // No filters provided, return all users
+            return findAll();
+        }
+
+        String sql = SELECT_ALL_USERS_SQL + " WHERE " + String.join(" AND ", whereClauses);
+        return jdbcTemplate.query(sql, new UserRowMapper(), params.toArray());
+    }
+
+    /**
+     * Converts wildcard pattern with * to SQL LIKE pattern with %
+     * Examples:
+     *   "John*" -> "John%"
+     *   "*Smith" -> "%Smith"
+     *   "*Doe*" -> "%Doe%"
+     *   "John" -> "John" (no wildcards)
+     */
+    private String buildLikePattern(String pattern) {
+        // Replace * with % for SQL LIKE wildcard
+        String likePattern = pattern.replace("*", "%");
+        log.info("buildLikePattern: input='{}', output='{}'", pattern, likePattern);
+        return likePattern;
     }
 
     public User findById(String id) {

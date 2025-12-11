@@ -20,6 +20,10 @@ public class UserService {
         return userRepository.findAll();
     }
 
+    public List<User> getUsersByFilters(String firstName, String lastName) {
+        return userRepository.findByFilters(firstName, lastName);
+    }
+
     public User getUserById(String id) {
         return userRepository.findById(id);
     }
