@@ -4,6 +4,8 @@ set -e
 # Always run from the directory where this script is located
 cd "$(dirname "$0")"
 
+rm -rf target
+
 echo ">>> Releasing Maven build to Git..."
 ./release-mvn-to-git.sh
 
