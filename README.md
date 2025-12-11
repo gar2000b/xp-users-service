@@ -3,6 +3,8 @@
 A lightweight **experimental** Spring Boot microservice for managing user accounts across various research and prototype systems.  
 This service is part of the broader **XP (eXPerimental Platform)** ecosystem.
 
+> **Part of the XP Project:** This service is part of the [xp-project](https://github.com/gar2000b/xp-project) workspace, which coordinates multiple XP microservices and infrastructure.
+
 ---
 
 ## 🚀 Features
