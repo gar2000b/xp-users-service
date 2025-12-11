@@ -1,11 +1,23 @@
 package ca.digilogue.xp.model;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
+@Schema(description = "User entity representing a user in the XP system")
 public class User {
 
+    @Schema(description = "Unique identifier for the user", example = "123", accessMode = Schema.AccessMode.READ_ONLY)
     private String id;
+
+    @Schema(description = "Unique username for the user", example = "johndoe", requiredMode = Schema.RequiredMode.REQUIRED)
     private String username;
+
+    @Schema(description = "User's first name", example = "John")
     private String firstName;
+
+    @Schema(description = "User's last name", example = "Doe")
     private String lastName;
+
+    @Schema(description = "User's email address", example = "john.doe@example.com", format = "email")
     private String email;
 
     public User() {
