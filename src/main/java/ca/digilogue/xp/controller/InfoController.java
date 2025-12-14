@@ -42,7 +42,7 @@ public class InfoController {
 
     @Operation(
             summary = "Get service information",
-            description = "Returns service metadata including the service name and current version"
+            description = "Returns service metadata including the service name, current version, and instance identifier"
     )
     @ApiResponse(
             responseCode = "200",
@@ -52,13 +52,14 @@ public class InfoController {
     )
     @GetMapping("/info")
     public ResponseEntity<Info> getServiceInfo() {
-        Info response = new Info("XP Users Service", App.version);
+        Info response = new Info("XP Users Service", App.version, App.instanceId);
 
         // Log JSON-style representation
         log.info(
-                "GET /info JSON Response: {{\"appName\":\"{}\",\"version\":\"{}\"}}",
+                "GET /info JSON Response: {{\"appName\":\"{}\",\"version\":\"{}\",\"instanceId\":\"{}\"}}",
                 response.getAppName(),
-                response.getVersion()
+                response.getVersion(),
+                response.getInstanceId()
         );
 
         return ResponseEntity.ok(response); // 200 OK

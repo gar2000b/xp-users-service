@@ -16,6 +16,7 @@ import java.util.List;
 public class App {
 
     public static String version;
+    public static String instanceId;
 
     private static final Logger log = LoggerFactory.getLogger(App.class);
 
@@ -23,8 +24,9 @@ public class App {
         ConfigurableApplicationContext ctx = SpringApplication.run(App.class, args);
 
         version = resolveVersion(ctx);
+        instanceId = resolveInstanceId();
 
-        log.info("xp-users-service is running @ version: {}", version);
+        log.info("xp-users-service is running @ version: {}, instanceId: {}", version, instanceId);
     }
 
     private static String resolveVersion(ConfigurableApplicationContext ctx) {
@@ -72,5 +74,22 @@ public class App {
 
         // Last-resort fallback for local dev
         return "DEV";
+    }
+
+    private static String resolveInstanceId() {
+        // First, try environment variable (set in docker-compose)
+        String envInstanceId = System.getenv("INSTANCE_ID");
+        if (envInstanceId != null && !envInstanceId.isEmpty()) {
+            return envInstanceId;
+        }
+
+        // Fallback to hostname (Docker container name)
+        String hostname = System.getenv("HOSTNAME");
+        if (hostname != null && !hostname.isEmpty()) {
+            return hostname;
+        }
+
+        // Last resort: generate a UUID
+        return java.util.UUID.randomUUID().toString().substring(0, 8);
     }
 }
